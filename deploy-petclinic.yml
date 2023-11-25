@@ -1,0 +1,28 @@
+---
+- hosts: tomcat_server
+  become: yes
+
+  tasks:
+    - name: Stop Tomcat
+      service:
+        name: tomcat
+        state: stopped
+
+    - name: Copy the JAR file to the server
+      copy:
+        src: "/var/jenkins_home/jobs/petclinic-build/builds/{{ BUILD_ID }}/archive/build/libs/spring-petclinic-3.2.0.jar"
+        dest: "/usr/local/tomcat/build/spring-petclinic-3.2.0.jar"
+
+    - name: Remove old JAR file from Tomcat webapps directory
+      file:
+        path: "/usr/local/tomcat/webapps/spring-petclinic-3.2.0.jar"
+        state: absent
+      ignore_errors: yes
+
+    - name: Deploy the new JAR file to Tomcat webapps directory
+      command: "mv /usr/local/tomcat/build/spring-petclinic-3.2.0.jar /usr/local/tomcat/webapps/"
+
+    - name: Start Tomcat
+      service:
+        name: tomcat
+        state: started
