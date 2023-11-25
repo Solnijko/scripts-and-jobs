@@ -1,0 +1,14 @@
+pipeline {
+    agent {
+        docker {
+            image any
+        }
+    }
+    stages {
+        stage('Deploy') { 
+            steps {
+                ansiblePlaybook inventory: 'inventory.yml', playbook: 'deploy-petclinic.yml', extraVars: '${BUILD_ID}'
+            }
+        }
+    }
+}
