@@ -18,7 +18,7 @@
 
     - name: Copy the WAR file to the server
       copy:
-        src: "/var/jenkins_home/jobs/petclinic-build/builds/{{ buildId }}/archive/target/petclinic.war"
+        src: "/var/jenkins_home/jobs/spring-petclinic-build/builds/{{ buildId }}/archive/target/petclinic.war"
         dest: "/home/tomcat/{{ bkpdate }}/build/petclinic.war"
         
     - name: Check if war file exists
