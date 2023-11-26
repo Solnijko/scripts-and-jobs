@@ -1,0 +1,56 @@
+---
+- hosts: tomcat_server
+  become: yes
+
+  tasks:
+    - name: Get current date
+      set_fact: bkpdate="{{ lookup('pipe', 'date +%Y%m%d-%H') }}"
+      
+    - name: create directory with a date in name
+      file: path="/home/tomcat/{{ bkpdate }}" state=directory mode=0755
+      
+    - name: Ensure directories exist for WAR file
+      file:
+        path: "/home/tomcat/{{ bkpdate }}/build"
+        state: directory
+        mode: "0755"
+        recurse: yes
+
+    - name: Copy the WAR file to the server
+      copy:
+        src: "/var/jenkins_home/jobs/petclinic-build/builds/{{ buildId }}/archive/target/petclinic.war"
+        dest: "/home/tomcat/{{ bkpdate }}/build/petclinic.war"
+        
+    - name: Check if war file exists
+      stat:
+        path: "/opt/tomcat/webapps/petclinic.war"
+      register: war_file
+    
+    - name: Backup war
+      copy:
+        src: "/opt/tomcat/webapps/petclinic.war"
+        dest: "/home/tomcat/{{ bkpdate }}/"
+      when: war_file.stat.exists
+             
+    - name: Unpack war        
+      unarchive: 
+        src: "/home/tomcat/{{ bkpdate }}/build/petclinic.war"
+        dest: "/opt/tomcat/webapps/ROOT/"
+        copy: no
+        mode: 0755
+        owner: "tomcat"
+        group: "tomcat"
+      notify:
+        - Restart tomcat
+        
+    - name: Delete remote war file
+      file: 
+        path: "/opt/tomcat/webapps/petclinic.war"
+        state: absent
+      ignore_errors: yes
+      
+  handlers:
+    - name: Restart tomcat
+      service: 
+        name: tomcat
+        state: restarted

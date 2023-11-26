@@ -1,0 +1,17 @@
+pipeline {
+    agent any 
+    parameters {
+        string(name: 'BUILD_ID', defaultValue: '', description: 'Last successful build ID')
+    }
+    stages {
+        stage('Deploy') { 
+            steps {
+                script {
+                    def buildId = params.BUILD_ID
+                    echo "Last build ID: ${buildId}"
+                    ansiblePlaybook hostKeyChecking: false, credentialsId: 'SSH-server-credentials', extras: "-e 'buildId=${buildId}'", inventory: 'deployment/inventory.yml', playbook: 'deployment/deploy-petclinic.yml'
+                }
+            }
+        }
+    }
+}

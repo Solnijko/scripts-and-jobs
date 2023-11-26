@@ -1,0 +1,6 @@
+[tomcat_server]
+192.168.31.240:2022
+
+[all:vars]
+ansible_user=jenkins
+ansible_ssh_pass=jenkins
