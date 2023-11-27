@@ -31,12 +31,6 @@
         group: "tomcat"
       notify:
         - Restart tomcat
-        
-    - name: Delete remote war file
-      file: 
-        path: "/opt/tomcat/webapps/petclinic.war"
-        state: absent
-      ignore_errors: yes
       
   handlers:
     - name: Restart tomcat
