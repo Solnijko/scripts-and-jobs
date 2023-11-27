@@ -1,0 +1,98 @@
+Started by upstream project "spring-petclinic-build" build number 10
+originally caused by:
+ Started by user Moskalyuk Maxim Alexandrovich
+ Replayed #9
+Lightweight checkout support not available, falling back to full checkout.
+Checking out git https://github.com/Solnijko/scripts-and-jobs.git into /var/jenkins_home/workspace/spring-petclinic-deploy@script/566473f7c3bd72bbda8961b3492966a38a1944506bef4944f24ff56d1308f7e4 to read pipeline/deployment/Jenkinsfile-deploy
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/Solnijko/scripts-and-jobs.git
+ > git init /var/jenkins_home/workspace/spring-petclinic-deploy@script/566473f7c3bd72bbda8961b3492966a38a1944506bef4944f24ff56d1308f7e4 # timeout=10
+Fetching upstream changes from https://github.com/Solnijko/scripts-and-jobs.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.2'
+ > git fetch --tags --force --progress -- https://github.com/Solnijko/scripts-and-jobs.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/Solnijko/scripts-and-jobs.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Seen branch in repository origin/main
+Seen 1 remote branch
+ > git show-ref --tags -d # timeout=10
+Checking out Revision cd659b30652e17e04d77f0b88903a5434a16e3f6 (origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f cd659b30652e17e04d77f0b88903a5434a16e3f6 # timeout=10
+Commit message: "Modified playbook: removed unnecessary steps"
+First time build. Skipping changelog.
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/spring-petclinic-deploy
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/spring-petclinic-deploy/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Solnijko/scripts-and-jobs.git # timeout=10
+Fetching upstream changes from https://github.com/Solnijko/scripts-and-jobs.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.2'
+ > git fetch --tags --force --progress -- https://github.com/Solnijko/scripts-and-jobs.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/main
+Seen 1 remote branch
+ > git show-ref --tags -d # timeout=10
+Checking out Revision cd659b30652e17e04d77f0b88903a5434a16e3f6 (origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f cd659b30652e17e04d77f0b88903a5434a16e3f6 # timeout=10
+Commit message: "Modified playbook: removed unnecessary steps"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+Last build ID: 10
+[Pipeline] ansiblePlaybook
+[spring-petclinic-deploy] $ sshpass ******** ansible-playbook pipeline/deployment/deploy-petclinic.yml -i pipeline/deployment/inventory.yml -u jenkins -k -e buildId=10
+
+PLAY [tomcat_server] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.31.240]
+
+TASK [Get current date] ********************************************************
+ok: [192.168.31.240]
+
+TASK [create directory with a date in name] ************************************
+changed: [192.168.31.240]
+
+TASK [Ensure directories exist for WAR file] ***********************************
+changed: [192.168.31.240]
+
+TASK [Copy the WAR file to the server] *****************************************
+changed: [192.168.31.240]
+
+TASK [Unpack war] **************************************************************
+changed: [192.168.31.240]
+
+RUNNING HANDLER [Restart tomcat] ***********************************************
+changed: [192.168.31.240]
+
+PLAY RECAP *********************************************************************
+192.168.31.240             : ok=7    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
